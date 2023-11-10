@@ -1,0 +1,71 @@
+scn ImmersiveHealthMCMConfig
+
+short iMaster
+short iMouseover
+short iOption
+short iTemp
+float fTemp
+float fValue
+reference rList
+
+begin GameMode
+	if GetGameRestarted
+		if IsModLoaded "The Mod Configuration Menu.esp"
+			set iMaster to GetModIndex "The Mod Configuration Menu.esp"
+			set rList to BuildRef iMaster 2790
+			ListAddForm rList ImmersiveHealthIndicatorMCM
+		endif
+	endif
+end
+
+begin MenuMode 1013
+	if IsModLoaded "The Mod Configuration Menu.esp"
+	else
+		Return
+	endif
+
+	if GetUIFloat "StartMenu/MCM/_ActiveMod" == GetModIndex "ImmersiveHealthIndicator"
+		set iOption to GetUIFloat "StartMenu/MCM/_ActiveOption"
+		set fValue to GetUIFloat "StartMenu/MCM/_Value"
+
+		if GetUIFloat "StartMenu/MCM/_Reset"			;1 - RESET
+			SetUIFloat "StartMenu/MCM/_Reset" 0
+
+			SetUIFloat "StartMenu/MCM/*:1/_columns" 1
+
+		elseif GetUIFloat "StartMenu/MCM/_Default"		;2 - DEFAULT
+			SetUIFloat "StartMenu/MCM/_Default" 0
+			SetUIFloat "StartMenu/MCM/_Reset" 1
+
+		elseif GetUIFloat "StartMenu/MCM/_NewValue"		;3 - NEW VALUE
+			SetUIFloat "StartMenu/MCM/_NewValue" 0
+			SetUIFloat "StartMenu/MCM/_Reset" 1
+
+		elseif GetUIFloat "StartMenu/MCM/_ShowList" == 1		;4 - SHOW LIST
+			SetUIFloat "StartMenu/MCM/_ShowList" 2
+
+		elseif GetUIFloat "StartMenu/MCM/_ShowScale" == 1		;5 - SHOW SCALE
+			SetUIFloat "StartMenu/MCM/_ShowScale" 2
+
+		elseif GetUIFloat "StartMenu/MCM/_DefaultScale"		;6 - DEFAULT SCALE
+			SetUIFloat "StartMenu/MCM/_DefaultScale" 0
+			SetUIFloat "StartMenu/MCM/_ShowScale" 2
+
+		endif
+
+		if iMouseover != GetUIFloat "StartMenu/MCM/*:1/_optionID"		;7 - MOUSE-OVER
+			set iMouseover to GetUIFloat "StartMenu/MCM/*:1/_optionID"
+			if iMouseover
+				SetUIFloat "StartMenu/MCM/MCM_Info/visible" 1
+
+				if iMouseover == 1
+				else
+					SetUIFloat "StartMenu/MCM/MCM_Info/visible" 0
+				endif
+			else
+				SetUIFloat "StartMenu/MCM/MCM_Info/visible" 0
+			endif
+		endif
+	endif
+end
+

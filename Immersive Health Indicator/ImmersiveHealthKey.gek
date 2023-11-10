@@ -1,0 +1,7 @@
+scn ImmersiveHealthKey
+
+ Begin GameMode
+  if GetGameRestarted
+    SetEventHandler "OnKeyDown:45" ImmersiveHealthIndicator
+  endif
+End
